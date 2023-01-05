@@ -3,6 +3,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:weather_app/app/presentation/pages/search_page.dart';
 import 'package:weather_app/app/utils/constans/text_styles/app_text_styles.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 
 import '../../utils/constans/app_colors/app_colors.dart';
 
@@ -58,7 +59,7 @@ class _HomePageState extends State<HomePage> {
             left: 90,
             child: Text(
               '🌩',
-              style: TextStyle(fontSize: 50),
+              style: TextStyle(fontSize: 80),
             ),
           ),
           Positioned(
@@ -66,20 +67,21 @@ class _HomePageState extends State<HomePage> {
             right: 20,
             child: Text(
               '''
-             Кочо суук болтат. 
-             Жылуурак кийинип алыныз. 
-             🧥🧣🧤
-            ''',
+                 Кочо суук болтат.
+                 Жылуурак кийинип алыныз.
+                 🧥🧣🧤
+                ''',
               textAlign: TextAlign.center,
               style: AppTextStyles.textWhite35W400,
             ),
+            //
           ),
           Positioned(
             top: 650,
             right: 130,
             child: Text(
-              'Ош',
-              style: AppTextStyles.textWhite50W800,
+              'Ош'.toUpperCase(),
+              style: AppTextStyles.textWhite35W400,
             ),
           ),
         ],
