@@ -1,12 +1,9 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart';
 import 'package:weather_app/app/presentation/pages/search_page.dart';
-
 import '../../data/services/geo_locatoin.dart';
 import '../../utils/constans/app_colors/app_colors.dart';
 import '../../utils/constans/text_styles/app_text_styles.dart';
@@ -31,7 +28,7 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _ailanipAtat = true;
     });
-    log('Init State ===> ');
+    
 
     showWearherByLocation();
 
@@ -39,24 +36,24 @@ class _HomePageState extends State<HomePage> {
   }
 
   showWearherByLocation() async {
-    final position = await GeoLocation().getPosition();
+    final position = await GeoLocation.getPosition();
     await getWeatherByLocation(position);
-    // log('position.latitude ====>${position.latitude} ');
-    // log('position.longitude ====>${position.longitude} ');
+   
+   
   }
 
-  Future<void> getWeatherByLocation (Position position) async {
+  Future<void> getWeatherByLocation(Position position) async {
     try {
-       setState(() {
-   _ailanipAtat = true;
- });
-    final http = Client();
-    Uri uri = Uri.parse(
-        'https://api.openweathermap.org/data/2.5/weather?lat=${position.latitude}&lon=${position.longitude}&appid=597fd8840114926137baeebbb9f68dd5');
-    
+      setState(() {
+        _ailanipAtat = true;
+      });
+      final http = Client();
+      Uri uri = Uri.parse(
+          'https://api.openweathermap.org/data/2.5/weather?lat=${position.latitude}&lon=${position.longitude}&appid=597fd8840114926137baeebbb9f68dd5');
+
       var response = await http.get(uri);
-      // log('jooop ====> ${response.data}');
-      final maalymat = jsonDecode(response.body) as Map <String, dynamic>;
+  
+      final maalymat = jsonDecode(response.body) as Map<String, dynamic>;
       _cityName = maalymat['name'];
 
       final kelvin = maalymat['main']['temp'] as num;
@@ -66,10 +63,10 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         _ailanipAtat = false;
       });
-    
-    } catch (kata) {setState(() {
-      _ailanipAtat = false;
-    });
+    } catch (kata) {
+      setState(() {
+        _ailanipAtat = false;
+      });
       throw Exception(kata);
     }
   }
@@ -113,7 +110,15 @@ class _HomePageState extends State<HomePage> {
         elevation: 0,
         backgroundColor: AppColors.transparent,
         leading: IconButton(
-          onPressed: () {},
+          onPressed: () async {
+            final typedCityName = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: ((context) => SearchPage()),
+                ));
+            await getWeatherByCityName(typedCityName);
+            setState(() {});
+          },
           icon: const Icon(
             Icons.location_on_outlined,
             size: 50,
@@ -137,32 +142,46 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Stack(
         children: [
-          Image.asset(
-              height: double.infinity,
-              fit: BoxFit.cover,
-              'assets/images/bg_images.jpg'),
-          const Positioned(
-            top: 130,
-            left: 150,
-            child: Text(
-              '🌦 ',
-              style: TextStyle(fontSize: 70, color: AppColors.white),
+          Container(
+            child: null,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: AssetImage('assets/images/bg_images.jpg'),
+              ),
             ),
           ),
-          Positioned(
-            top: 150,
-            left: 50,
-            child: Text('$_temp\u00B0  ', style: AppTextStyles.textWhite100),
-          ),
+          if (_ailanipAtat == true)
+            const Positioned(
+              left: 150,
+              top: 400,
+              child: SizedBox(
+                  height: 50,
+                  width: 50,
+                  child: CircularProgressIndicator(
+                    color: Colors.red,
+                  )),
+            )
+          else
+            Positioned(
+              top: 150,
+              left: 50,
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Text('$_temp\u00B0  ', style: AppTextStyles.textWhite100),
+                      Text(_icons, style: AppTextStyles.textWhite100),
+                    ],
+                  ),
+                ],
+              ),
+            ),
           Positioned(
             top: 400,
-            right: 30,
-            child: Text('''
-             ass
-             asa
-             asa
-             asas
-              ''', style: AppTextStyles.textWhite35W400),
+            right: 0,
+            child: Text(_description,
+                textAlign: TextAlign.center, style: AppTextStyles.text20Black),
           ),
           Positioned(
             top: 650,
