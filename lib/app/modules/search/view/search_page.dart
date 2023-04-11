@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import '../../utils/constans/app_colors/app_colors.dart';
-import '../../utils/constans/text_styles/app_text_styles.dart';
+import '../../../utils/constans/app_colors/app_colors.dart';
+import '../../../utils/constans/text_styles/app_text_styles.dart';
 
 class SearchPage extends StatelessWidget {
   SearchPage({super.key});
@@ -11,13 +11,16 @@ class SearchPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Scaffold(
-        extendBodyBehindAppBar: true,
+          extendBodyBehindAppBar: true,
           appBar: AppBar(
-            backgroundColor: AppColors.transparent,
-            elevation: 0,
+              backgroundColor: AppColors.transparent,
+              elevation: 0,
               leading: IconButton(
-            onPressed: () {Navigator.pop(context);}, icon: Icon(Icons.arrow_back_ios),
-          )),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: Icon(Icons.arrow_back_ios),
+              )),
           body: Stack(children: [
             Image.asset(
                 height: double.infinity,
@@ -63,8 +66,8 @@ class SearchPage extends StatelessWidget {
                     height: 30,
                   ),
                   OutlinedButton(
-                      onPressed: ()  {
-                       Navigator.pop(context,_controller.text);
+                      onPressed: () {
+                        Navigator.pop(context, _controller.text);
                         FocusManager.instance.primaryFocus?.unfocus();
                         log('controller =====> ${_controller.text}');
                       },
